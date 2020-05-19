@@ -32,7 +32,7 @@ ChatLogic::~ChatLogic()
     //// STUDENT CODE
     ////
 
-    // delete chatbot instance
+    // delete chatbot instance LukPek
     delete _chatBot;
 
     // delete all nodes
