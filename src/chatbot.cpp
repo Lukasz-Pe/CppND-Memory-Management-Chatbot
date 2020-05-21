@@ -27,23 +27,78 @@ ChatBot::ChatBot(std::string filename)
     _rootNode = nullptr;
 
     // load image into heap memory
-    _image = new wxBitmap(filename, wxBITMAP_TYPE_PNG);
+    _image = std::make_unique<wxBitmap>(filename, wxBITMAP_TYPE_PNG);
 }
 
 ChatBot::~ChatBot()
 {
-    std::cout << "ChatBot Destructor" << std::endl;
-
     // deallocate heap memory
     if(_image != NULL) // Attention: wxWidgets used NULL and not nullptr
     {
-        delete _image;
+//        delete _image;
         _image = NULL;
     }
+    std::cout << "ChatBot Destructor" << std::endl;
 }
 
 //// STUDENT CODE
 ////
+
+ChatBot &ChatBot::operator=(const ChatBot& source){
+    if(this==&source){
+        return *this;
+    }
+    if(_image!=nullptr){
+        _image.reset();
+    }
+    _image= std::make_unique<wxBitmap>();
+    *_image=*source._image;
+    _rootNode=source._rootNode;
+    _currentNode=source._currentNode;
+    _chatLogic=source._chatLogic;
+    std::cout<<"ChatBot assign operator.\n";
+    return *this;
+}
+
+ChatBot::ChatBot(const ChatBot& source){
+    _image= std::make_unique<wxBitmap>();
+    *_image=*source._image;
+    _rootNode=source._rootNode;
+    _currentNode=source._currentNode;
+    _chatLogic=source._chatLogic;
+    std::cout<<"ChatBot copy constructor.\n";
+}
+
+ChatBot::ChatBot(ChatBot&& source){
+    _image=std::move(source._image);
+    _rootNode=source._rootNode;
+    _currentNode=source._currentNode;
+    _chatLogic=source._chatLogic;
+    source._image=nullptr;
+    source._rootNode=nullptr;
+    source._currentNode=nullptr;
+    source._chatLogic=nullptr;
+    std::cout<<"ChatBot move constructor.\n";
+}
+
+ChatBot &ChatBot::operator=(ChatBot&& source){
+    if(this==&source){
+        return *this;
+    }
+    if(_image!=nullptr){
+        _image.reset();
+    }
+    _image=std::move(source._image);
+    _rootNode=source._rootNode;
+    _currentNode=source._currentNode;
+    _chatLogic=source._chatLogic;
+    source._image=nullptr;
+    source._rootNode=nullptr;
+    source._currentNode=nullptr;
+    source._chatLogic=nullptr;
+    std::cout<<"ChatBot move operator.\n";
+    return *this;
+}
 
 ////
 //// EOF STUDENT CODE
